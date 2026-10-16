@@ -70,6 +70,18 @@ python src/main_integration.py --book "book me a court tomorrow at 2pm"
 - Requires a visible browser window — headless login is blocked by a captcha
 - Fixed waits rather than real ones, so a slow page load reports no availability
 
+## Recap
+
+What it does: Type “book me a court tomorrow at 2pm,” Claude parses it, Playwright scrapes ClubLocker’s grid and books it.
+
+Hardest bug: Asked for 3 PM, it silently booked 1 PM. The grid renders a whole free stretch as one element listing every time inside it, so my match hit the container instead of the slot. No error — just the wrong answer. Caught it because the form showed the time it picked.
+
+Best find: 3 PM wasn’t bookable at all. Bookings are 45 minutes and the courts were taken at 3:30, so the latest valid start was 2:45. Figured that out from what the dropdown offered.
+
+What went well: Shipped in layers, committed each working. Built the dry-run guard before the code that could book for real.
+
+Why I stopped: Checked the ToS, automated booking isn’t allowed, archived it. Next time I check that first.
+
 ## Author
 
 Yusuf Sheikh (Columbia class of 2028 | Computer Science & Varsity Men's Squash)
