@@ -1,61 +1,75 @@
 # ClubLocker AI Court Booking Assistant
 
-An AI-powered court reservation system for ClubLocker squash courts. Book courts using natural language commands.
+Book squash courts on ClubLocker using natural language. Type "book me a court
+tomorrow at 2pm" and it finds open courts, picks one, and makes the reservation.
 
-## Features ##
+## Status: archived
 
-- **Web scraping**: Playwright-based automation to extract court availability
-- **Natural language parsing**: Claude AI integration to understand booking requests
-- **Smart availability**: Shows available courts at requested times
-- **Secure credentials**: Environment-based credential management
+This project works end to end, but I stopped development after confirming that
+automated booking is against ClubLocker's terms of service. The code is here as
+a record of the work, not as a tool to run.
 
-## Project Status ##
+The path forward, if there is one, is permission rather than automation —
+sanctioned access through the club or an official API.
 
-MVP foundation complete (Oct 15, 2026):
-- ✅ Login automation with bot detection bypass
-- ✅ HTML parsing to extract court availability
-- ✅ Time normalization and court matching
-- ⏳ LLM integration (ChatGPT)
-- ⏳ Booking automation
-- ⏳ Frontend UI
+## What it does
 
-## Tech Stack ##
+A request in plain English is parsed by Claude into a structured booking
+(date, time, court). Playwright logs into ClubLocker, loads the reservation
+grid for that date, and BeautifulSoup extracts which courts are genuinely open
+at that hour. You confirm a court, and it fills and submits the booking form.
 
-- **Backend**: Python 3.14.2
-- **Scraping**: Playwright
-- **Parsing**: BeautifulSoup4
-- **LLM**: Claude
-- **Database**: SQLite (MVP)
-- **Frontend**: HTML/CSS/JavaScript
+Runs as a dry run by default — `--book` is required to actually reserve.
 
-## Setup ##
+## Built
+
+- Login automation and session handling with Playwright
+- Reverse-engineered ClubLocker's undocumented reservation grid (no public API)
+- Court availability extraction, including free-block vs. per-slot parsing
+- Time normalization across formats ("3 PM" → "03:00 PM")
+- Natural language parsing via the Claude API
+- End-to-end booking with a dry-run guard
+
+## Tech stack
+
+- Python 3.14
+- Playwright (browser automation)
+- BeautifulSoup4 (HTML parsing)
+- Claude API (natural language parsing)
+
+## Setup
 
 ```bash
-# Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
-
-# Install dependencies 
 pip install -r requirements.txt
+```
 
-# Create .env file with your ClubLocker credentials
+Create a `.env` file:
+
+```
 CLUBLOCKER_USERNAME=your_email@example.com
 CLUBLOCKER_PASSWORD=your_password
+ANTHROPIC_API_KEY=your_api_key
 ```
 
-## Usage ##
+## Usage
 
 ```bash
-python main.py
+# Dry run — fills the form, does not book
+python src/main_integration.py "book me a court tomorrow at 2pm"
+
+# Actually reserves
+python src/main_integration.py --book "book me a court tomorrow at 2pm"
 ```
 
-## Next Steps ##
+## Known limitations
 
-1. Integrate ClaudeAI for natural language parsing
-2. Automate court booking
-3. Build chat UI
-4. Add multi-player support
+- Dates are limited to "today" and "tomorrow"; weekday names aren't handled
+- The organization ID is hardcoded to Columbia's courts
+- Requires a visible browser window — headless login is blocked by a captcha
+- Fixed waits rather than real ones, so a slow page load reports no availability
 
-## Author ##
+## Author
 
 Yusuf Sheikh (Columbia class of 2028 | Computer Science & Varsity Men's Squash)
