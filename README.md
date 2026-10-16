@@ -5,7 +5,7 @@ An AI-powered court reservation system for ClubLocker squash courts. Book courts
 ## Features ##
 
 - **Web scraping**: Playwright-based automation to extract court availability
-- **Natural language parsing**: ChatGPT integration to understand booking requests
+- **Natural language parsing**: Claude AI integration to understand booking requests
 - **Smart availability**: Shows available courts at requested times
 - **Secure credentials**: Environment-based credential management
 
@@ -24,7 +24,7 @@ MVP foundation complete (Oct 15, 2026):
 - **Backend**: Python 3.14.2
 - **Scraping**: Playwright
 - **Parsing**: BeautifulSoup4
-- **LLM**: ChatGPT (Free tier)
+- **LLM**: Claude
 - **Database**: SQLite (MVP)
 - **Frontend**: HTML/CSS/JavaScript
 
@@ -51,7 +51,7 @@ python main.py
 
 ## Next Steps ##
 
-1. Integrate ChatGPT for natural language parsing
+1. Integrate ClaudeAI for natural language parsing
 2. Automate court booking
 3. Build chat UI
 4. Add multi-player support
