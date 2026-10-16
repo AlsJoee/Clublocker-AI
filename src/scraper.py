@@ -45,6 +45,41 @@ def parse_available_courts(html_content, target_time):
     return available_courts
 
 
+def find_slot_positions(html_content, target_time):
+    """
+    Find the grid position of every open slot at a given time.
+
+    Returns a list of (court_number, slot_index) tuples, where slot_index is
+    the slot's position within that court's column — which is what Playwright
+    needs in order to click it.
+    """
+    soup = BeautifulSoup(html_content, 'html.parser')
+    slot_columns = soup.find_all('div', class_='column slots')
+    target_normalized = normalize_time(target_time)
+
+    positions = []
+
+    for court_num, column in enumerate(slot_columns, start=1):
+        slots = column.find_all('div', class_='slot')
+
+        for slot_index, slot in enumerate(slots):
+            classes = slot.get('class', [])
+
+            if 'past' in classes or 'open' not in classes:
+                continue
+
+            slot_time_elem = slot.find('div', class_='slot-time-start')
+            if slot_time_elem:
+                time_text = slot_time_elem.get_text(strip=True)
+                times = re.findall(r'\d{1,2}:\d{2}\s(?:AM|PM)', time_text)
+
+                if target_normalized in times:
+                    positions.append((court_num, slot_index))
+                    break
+
+    return positions
+
+
 def normalize_time(time_str):
     """
     Normalize time string to format HH:00 AM/PM
@@ -72,4 +107,6 @@ if __name__ == "__main__":
     # Test
     for time in ["1 PM", "2 PM", "3 PM", "01:00 PM"]:
         available = parse_available_courts(html, time)
+        positions = find_slot_positions(html, time)
         print(f"Available courts at {time}: {available}")
+        print(f"  slot positions: {positions}")
