@@ -3,3 +3,8 @@ venv/
 __pycache__/
 *.pyc
 login_page.png
+booking_form.png
+booking_form.html
+booking_confirmed.png
+reservations.html
+reservations_page.png
